@@ -1,6 +1,382 @@
-﻿Compilación iniciada a las 05:55 p. m....
-1>------ Operación Compilar iniciada: Proyecto: Practica A2, configuración: Debug Any CPU ------
-1>  Omitiendo analizadores para acelerar la compilación. Puede ejecutar los comandos "Build" o "Rebuild" para ejecutar los analizadores.
-1>  Practica A2 -> C:\Users\jasxn\source\repos\Practica A2\Practica A2\bin\Debug\net10.0\Practica A2.dll
-========== Compilación: 1 correcto, 0 erróneo, 0 actualizado, 0 omitido ==========
-========== Compilar completado a las 05:55 p. m. y tardó 00.730 segundos ==========
+using System;
+
+namespace NeuroLabAI
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            string[] codigos = new string[120];
+            string[] proyectos = new string[120];
+            string[] tiposRed = new string[120];
+            int[] capas = new int[120];
+            int[] neuronas = new int[120];
+            double[] precisiones = new double[120];
+            string[] estados = new string[120];
+
+            int totalExperimentos = 0;
+            int opcion = 0;
+
+            do
+            {
+  
+                Console.Clear();
+                Console.WriteLine(  "NEUROLAB AI - GUIA DE PRACTICA 3 "  );
+                Console.WriteLine("1. Registrar experimento");
+                Console.WriteLine("2. Consultar experimento");
+                Console.WriteLine("3. Actualizar precisión");
+                Console.WriteLine("4. Cambiar estado");
+                Console.WriteLine("5. Listar experimentos");
+                Console.WriteLine("6. Buscar por tipo de red neuronal");
+                Console.WriteLine("7. Mostrar estadísticas");
+                Console.WriteLine("8. Salir");
+                Console.Write("Ingrese una opción: ");
+
+                if (!int.TryParse(Console.ReadLine(), out opcion))
+                {
+                    opcion = 0;
+                }
+
+                Console.WriteLine();
+
+                switch (opcion)
+                {
+                    case 1:
+
+                        if (totalExperimentos >= 120)
+                        {
+                            Console.WriteLine("Error: El arreglo de experimentos está lleno (máximo 120).");
+                        }
+                        else
+                        {
+                            Console.WriteLine("--- Registrar Experimento ---");
+
+                     
+                            string nuevoCodigo = "";
+                            bool existe = false;
+
+                            do
+                            {
+                                existe = false;
+                                Console.Write("Código del experimento: ");
+                                nuevoCodigo = Console.ReadLine();
+
+                                for (int i = 0; i < totalExperimentos; i++)
+                                {
+                                    if (codigos[i] == nuevoCodigo)
+                                    {
+                                        existe = true;
+                                        Console.WriteLine("El código ya existe, ingrese otro diferente.");
+                                        break;
+                                    }
+                                }
+                            } while (existe || string.IsNullOrWhiteSpace(nuevoCodigo));
+
+                            codigos[totalExperimentos] = nuevoCodigo;
+
+                            Console.Write("Nombre del proyecto: ");
+                            proyectos[totalExperimentos] = Console.ReadLine();
+
+                            int opcTipo = 0;
+                            do
+                            {
+                                Console.WriteLine("Seleccione el Tipo de Red Neuronal:");
+                                Console.WriteLine("1. Perceptrón");
+                                Console.WriteLine("2. CNN");
+                                Console.WriteLine("3. RNN");
+                                Console.WriteLine("4. LSTM");
+                                Console.WriteLine("5. Transformer");
+                                Console.Write("Opción: ");
+                                int.TryParse(Console.ReadLine(), out opcTipo);
+                            } while (opcTipo < 1 || opcTipo > 5);
+
+                            if (opcTipo == 1) tiposRed[totalExperimentos] = "Perceptrón";
+                            else if (opcTipo == 2) tiposRed[totalExperimentos] = "CNN";
+                            else if (opcTipo == 3) tiposRed[totalExperimentos] = "RNN";
+                            else if (opcTipo == 4) tiposRed[totalExperimentos] = "LSTM";
+                            else if (opcTipo == 5) tiposRed[totalExperimentos] = "Transformer";
+
+        
+                            Console.Write("Número de capas: ");
+                            capas[totalExperimentos] = int.Parse(Console.ReadLine());
+
+                            Console.Write("Cantidad de neuronas: ");
+                            neuronas[totalExperimentos] = int.Parse(Console.ReadLine());
+
+
+                            double prec = -1;
+                            do
+                            {
+                                Console.Write("Precisión obtenida (0 a 100%): ");
+                                double.TryParse(Console.ReadLine(), out prec);
+                            } while (prec < 0 || prec > 100);
+                            precisiones[totalExperimentos] = prec;
+
+
+                            int opcEstado = 0;
+                            do
+                            {
+                                Console.WriteLine("Seleccione el Estado:");
+                                Console.WriteLine("1. Diseño");
+                                Console.WriteLine("2. Entrenamiento");
+                                Console.WriteLine("3. Finalizado");
+                                Console.Write("Opción: ");
+                                int.TryParse(Console.ReadLine(), out opcEstado);
+                            } while (opcEstado < 1 || opcEstado > 3);
+
+                            if (opcEstado == 1) estados[totalExperimentos] = "Diseño";
+                            else if (opcEstado == 2) estados[totalExperimentos] = "Entrenamiento";
+                            else if (opcEstado == 3) estados[totalExperimentos] = "Finalizado";
+
+                            totalExperimentos++;
+                            Console.WriteLine("\n¡Experimento guardado con éxito!");
+                        }
+                        break;
+
+                    case 2:
+
+                        Console.WriteLine("--- Consultar Experimento ---");
+                        Console.Write("Ingrese el código del experimento a buscar: ");
+                        string codBuscar = Console.ReadLine();
+
+                        int posEncontrado = -1;
+                        for (int i = 0; i < totalExperimentos; i++)
+                        {
+                            if (codigos[i] == codBuscar)
+                            {
+                                posEncontrado = i;
+                                break;
+                            }
+                        }
+
+                        if (posEncontrado != -1)
+                        {
+                            Console.WriteLine("\nInformación Encontrada:");
+                            Console.WriteLine("Código: " + codigos[posEncontrado]);
+                            Console.WriteLine("Proyecto: " + proyectos[posEncontrado]);
+                            Console.WriteLine("Tipo de Red: " + tiposRed[posEncontrado]);
+                            Console.WriteLine("Número de Capas: " + capas[posEncontrado]);
+                            Console.WriteLine("Cantidad de Neuronas: " + neuronas[posEncontrado]);
+                            Console.WriteLine("Precisión: " + precisiones[posEncontrado] + "%");
+                            Console.WriteLine("Estado: " + estados[posEncontrado]);
+                        }
+                        else
+                        {
+                            Console.WriteLine("No se encontró ningún experimento con ese código.");
+                        }
+                        break;
+
+                    case 3:
+
+                        Console.WriteLine("--- Actualizar Precisión ---");
+                        Console.Write("Ingrese el código del experimento: ");
+                        string codActualizar = Console.ReadLine();
+
+                        int posMod = -1;
+                        for (int i = 0; i < totalExperimentos; i++)
+                        {
+                            if (codigos[i] == codActualizar)
+                            {
+                                posMod = i;
+                                break;
+                            }
+                        }
+
+                        if (posMod != -1)
+                        {
+                            Console.WriteLine("Precisión actual: " + precisiones[posMod] + "%");
+                            double nuevaPrec = -1;
+                            do
+                            {
+                                Console.Write("Ingrese la nueva precisión (0 a 100%): ");
+                                double.TryParse(Console.ReadLine(), out nuevaPrec);
+                            } while (nuevaPrec < 0 || nuevaPrec > 100);
+
+                            precisiones[posMod] = nuevaPrec;
+                            Console.WriteLine("¡Precisión actualizada con éxito!");
+                        }
+                        else
+                        {
+                            Console.WriteLine("Experimento no encontrado.");
+                        }
+                        break;
+
+                    case 4:
+
+                        Console.WriteLine("--- Cambiar Estado ---");
+                        Console.Write("Ingrese el código del experimento: ");
+                        string codEstado = Console.ReadLine();
+
+                        int posEstado = -1;
+                        for (int i = 0; i < totalExperimentos; i++)
+                        {
+                            if (codigos[i] == codEstado)
+                            {
+                                posEstado = i;
+                                break;
+                            }
+                        }
+
+                        if (posEstado != -1)
+                        {
+                            Console.WriteLine("Estado actual: " + estados[posEstado]);
+                            int nuevoEst = 0;
+                            do
+                            {
+                                Console.WriteLine("Seleccione el nuevo estado:");
+                                Console.WriteLine("1. Diseño");
+                                Console.WriteLine("2. Entrenamiento");
+                                Console.WriteLine("3. Finalizado");
+                                Console.Write("Opción: ");
+                                int.TryParse(Console.ReadLine(), out nuevoEst);
+                            } while (nuevoEst < 1 || nuevoEst > 3);
+
+                            if (nuevoEst == 1) estados[posEstado] = "Diseño";
+                            else if (nuevoEst == 2) estados[posEstado] = "Entrenamiento";
+                            else if (nuevoEst == 3) estados[posEstado] = "Finalizado";
+
+                            Console.WriteLine("¡Estado modificado con éxito!");
+                        }
+                        else
+                        {
+                            Console.WriteLine("Experimento no encontrado.");
+                        }
+                        break;
+
+                    case 5:
+
+                        Console.WriteLine("--- Lista de Experimentos Registrados ---");
+                        if (totalExperimentos == 0)
+                        {
+                            Console.WriteLine("No hay experimentos registrados.");
+                        }
+                        else
+                        {
+                            for (int i = 0; i < totalExperimentos; i++)
+                            {
+                                Console.WriteLine($"[{i + 1}] Código: {codigos[i]} | Proyecto: {proyectos[i]} | Red: {tiposRed[i]} | Capas: {capas[i]} | Neuronas: {neuronas[i]} | Precisión: {precisiones[i]}% | Estado: {estados[i]}");
+                            }
+                        }
+                        break;
+
+                    case 6:
+
+                        Console.WriteLine("--- Buscar por Tipo de Red ---");
+                        Console.WriteLine("1. Perceptrón");
+                        Console.WriteLine("2. CNN");
+                        Console.WriteLine("3. RNN");
+                        Console.WriteLine("4. LSTM");
+                        Console.WriteLine("5. Transformer");
+                        Console.Write("Seleccione una opción: ");
+
+                        int opcFiltro = 0;
+                        int.TryParse(Console.ReadLine(), out opcFiltro);
+
+                        string filtroTexto = "";
+                        if (opcFiltro == 1) filtroTexto = "Perceptrón";
+                        else if (opcFiltro == 2) filtroTexto = "CNN";
+                        else if (opcFiltro == 3) filtroTexto = "RNN";
+                        else if (opcFiltro == 4) filtroTexto = "LSTM";
+                        else if (opcFiltro == 5) filtroTexto = "Transformer";
+
+                        bool encontroTipo = false;
+                        Console.WriteLine($"\nResultados para el tipo '{filtroTexto}':");
+
+                        for (int i = 0; i < totalExperimentos; i++)
+                        {
+                            if (tiposRed[i] == filtroTexto)
+                            {
+                                Console.WriteLine($"Código: {codigos[i]} | Proyecto: {proyectos[i]} | Precisión: {precisiones[i]}% | Estado: {estados[i]}");
+                                encontroTipo = true;
+                            }
+                        }
+
+                        if (!encontroTipo)
+                        {
+                            Console.WriteLine("No se encontraron registros para este tipo de red.");
+                        }
+                        break;
+
+                    case 7:
+
+                        Console.WriteLine("--- Estadísticas Generales ---");
+                        if (totalExperimentos == 0)
+                        {
+                            Console.WriteLine("No se pueden generar estadísticas porque no hay datos registrados.");
+                        }
+                        else
+                        {
+                            double sumaPrecision = 0;
+                            double sumaNeuronas = 0;
+                            int expFinalizados = 0;
+
+                            int posMayor = 0;
+                            int posMenor = 0;
+
+                            int cPerceptron = 0, cCNN = 0, cRNN = 0, cLSTM = 0, cTransformer = 0;
+
+                            for (int i = 0; i < totalExperimentos; i++)
+                            {
+                                sumaPrecision += precisiones[i];
+                                sumaNeuronas += neuronas[i];
+                                if (estados[i] == "Finalizado")
+                                {
+                                    expFinalizados++;
+                                }
+
+                                if (precisiones[i] > precisiones[posMayor])
+                                {
+                                    posMayor = i;
+                                }
+                                if (precisiones[i] < precisiones[posMenor])
+                                {
+                                    posMenor = i;
+                                }
+
+                                if (tiposRed[i] == "Perceptrón") cPerceptron++;
+                                else if (tiposRed[i] == "CNN") cCNN++;
+                                else if (tiposRed[i] == "RNN") cRNN++;
+                                else if (tiposRed[i] == "LSTM") cLSTM++;
+                                else if (tiposRed[i] == "Transformer") cTransformer++;
+                            }
+
+                            double promPrecision = sumaPrecision / totalExperimentos;
+                            double promNeuronas = sumaNeuronas / totalExperimentos;
+
+                            Console.WriteLine("Total de experimentos: " + totalExperimentos);
+                            Console.WriteLine("Promedio de precisión: " + promPrecision.ToString("0.00") + "%");
+                            Console.WriteLine("Promedio de neuronas por exp: " + promNeuronas.ToString("0.00"));
+                            Console.WriteLine("Cantidad de experimentos finalizados: " + expFinalizados);
+
+                            Console.WriteLine("\nExperimento con mayor precisión: " + codigos[posMayor] + " (" + precisiones[posMayor] + "%)");
+                            Console.WriteLine("Experimento con menor precisión: " + codigos[posMenor] + " (" + precisiones[posMenor] + "%)");
+
+                            Console.WriteLine("\nCantidad por tipo de red:");
+                            Console.WriteLine("- Perceptrón: " + cPerceptron);
+                            Console.WriteLine("- CNN: " + cCNN);
+                            Console.WriteLine("- RNN: " + cRNN);
+                            Console.WriteLine("- LSTM: " + cLSTM);
+                            Console.WriteLine("- Transformer: " + cTransformer);
+                        }
+                        break;
+
+                    case 8:
+                        Console.WriteLine("Saliendo del programa...");
+                        break;
+
+                    default:
+                        Console.WriteLine("Opción no válida. Presione Enter e intente de nuevo.");
+                        break;
+                }
+
+                if (opcion != 8)
+                {
+                    Console.WriteLine("\nPresione cualquier tecla para volver al menú...");
+                    Console.ReadKey();
+                }
+
+            } while (opcion != 8);
+        }
+    }
+}
+
